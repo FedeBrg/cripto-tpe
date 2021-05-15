@@ -1,3 +1,9 @@
+#include <stdio.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <dirent.h> 
+#include <string.h>
+
 // https://web.archive.org/web/20080912171714/http://www.fortunecity.com/skyscraper/windows/364/bmpffrmt.html
 
 typedef struct{

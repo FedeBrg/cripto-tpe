@@ -1,5 +1,3 @@
-#include <stdio.h>
-#include <stdint.h>
 #include "galois.h"
 
 
@@ -11,9 +9,6 @@
 uint8_t gen_desplazado = 0b01100011;
 
 
-uint8_t main(){
-    printf("%d\n",mult_galois(84,13) );
-}
 
 uint8_t suma_galois(uint8_t x, uint8_t y){
     return x ^ y;

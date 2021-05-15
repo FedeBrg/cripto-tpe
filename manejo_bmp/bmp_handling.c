@@ -1,8 +1,3 @@
-#include <stdio.h>
-#include <stdint.h>
-#include <stdlib.h>
-#include <dirent.h> 
-#include <string.h>
 #include "bmp_handling.h"
 
 
@@ -76,7 +71,6 @@ ImageBMP * * read_bmps(char * directory, int k){
 			if(strcmp(".",dir->d_name)){
 
 				char * filename = create_path(directory,dir->d_name);
-				printf("%s\n",filename );
 				bmps[i] = read_bmp(filename);
 
 				i++;
@@ -146,7 +140,7 @@ uint8_t * * split_portadora(ImageBMP * portadora){
 			sub_array[3] = pixels[(i*width + j)+1+width];
 
 			splitted[pi] = sub_array;
-			printf("%d\n",pi );
+			
 
 			pi++;
 
@@ -203,27 +197,6 @@ int test_split_portadora(ImageBMP * portadora){
 
 
 
-int main(){
-
-
-	//ImageBMP * bmp = read_bmp_temp("test_bmps/Alfred.bmp");
-
-	//ImageBMP * * bmps = read_bmps("test_bmps",4);
-
-
-	for (int i = 0; i < 4; ++i){
-		//printf("%d\n",bmps[i]->header.biHeight);
-	}
-
-
-	int k = 4;
-	//test_split_secret(bmp,k);
-
-	//test_split_portadora(bmp);
-
-
-}
-
 
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -236,17 +209,12 @@ ImageBMP * read_bmp_new(const char * filename){
 
 	fread(&(bmp->header), sizeof(bmp->header), 1, fp);
 
-	//printf("%x\n",bmp->header.biSizeImage);
-
-	//printf("%d\n",bmp->header.bfSize);
 
 
     bmp->pixels = malloc(sizeof(*bmp->pixels) * bmp->header.biSizeImage);
 
-    printf("%x\n\n", bmp->header.bfOffBits);
 
     int n = fseek(fp, 1062, SEEK_SET);
-    //printf("%d\n",n );
 
 
     fread(bmp->pixels, bmp->header.biSizeImage, 1, fp);

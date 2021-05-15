@@ -3,7 +3,7 @@
 #include "lagrange.h"
 
 
-int main(){
+/*int main(){
 int n = 3;
  	double x[(2*n)-1];
  	double y[(2*n)-1];
@@ -20,7 +20,7 @@ int n = 3;
  	}
 
 	printf("%f\n",lagrange((2*n)-1,x,y) );
-}
+}*/
 
 
 //https://en.wikipedia.org/wiki/Lagrange_polynomial
