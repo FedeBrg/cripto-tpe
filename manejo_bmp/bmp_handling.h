@@ -51,3 +51,6 @@ ImageBMP * read_bmp(char * filename);
 
 // Le pasas el k que te dan de entrada y el path a un DIRECTORIO y te devuelve un ImageBMP * * con todas las bmps
 ImageBMP * * read_bmps(char * directory, int k); 
+
+
+uint8_t * merge_portadora(uint8_t * * portadora, uint32_t width, uint32_t height);

@@ -152,6 +152,36 @@ uint8_t * * split_portadora(ImageBMP * portadora){
 	return splitted;
 }
 
+uint8_t * merge_portadora(uint8_t * * portadora, uint32_t width, uint32_t height ){
+
+	uint8_t * pixels = malloc(height * width);
+
+
+	int pi = 0;
+
+
+	for (int i = 0; i < height-1; i+=2){
+		for (int j = 0; j < width-1; j+=2){
+			uint8_t * sub_array = portadora[pi];
+			pixels[(i*width + j)] = sub_array[0];
+			pixels[(i*width + j)+1] = sub_array[1];
+			pixels[(i*width + j)+width] = sub_array[2];
+			pixels[(i*width + j)+1+width] = sub_array[3];
+
+			//splitted[pi] = sub_array;
+			
+
+			pi++;
+
+
+		}
+
+	}
+
+	return pixels;
+
+}
+
 
 
 
