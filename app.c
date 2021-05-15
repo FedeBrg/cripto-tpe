@@ -5,9 +5,8 @@
 int main(){
 
 
-	ImageBMP * * bmps = read_bmps("manejo_bmp/test_bmps",2);
+	//ImageBMP * * bmps = read_bmps("manejo_bmp/test_bmps",2);
 
-	printf("Image height: %d\n",bmps[0]->header.biHeight );
-
+	//printf("Image height: %d\n",bmps[0]->header.biHeight );
 
 }

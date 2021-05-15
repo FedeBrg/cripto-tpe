@@ -6,14 +6,14 @@
 #include "../galois/galois.h"
 #include "../manejo_bmp/bmp_handling.h"
 
-int main(){
-    char x,w,v,u;
-    x=0;
-    w=0xFF;
-    v=0xAA;
-    u=4;
-    getYFromBlock(w, v, u);
-}
+    // int main(){
+    //     char x,w,v,u;
+    //     x=0;
+    //     w=0xFF;
+    //     v=0xAA;
+    //     u=4;
+    //     getYFromBlock(w, v, u);
+    // }
 
 void decrypt(int k, char path[]){
     //k es el k y path es donde estan las imagenes

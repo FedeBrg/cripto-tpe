@@ -11,6 +11,7 @@ uint8_t gen_desplazado = 0b01100011;
 
 
 uint8_t suma_galois(uint8_t x, uint8_t y){
+    //printf("%d,%d\n",x,y );
     return x ^ y;
 }
 
@@ -34,3 +35,25 @@ uint8_t mult_galois(uint8_t x, uint8_t y){
     return p;
 
 }
+
+
+uint8_t inv_galois(uint8_t x){
+    uint8_t inv = 1;
+
+    while(mult_galois(x,inv)!=1){
+        inv++;
+    }
+
+    return inv;
+
+}
+
+uint8_t div_galois(uint8_t x, uint8_t y){
+
+
+    uint8_t inv = inv_galois(y);
+
+    return mult_galois(x,inv);
+
+}
+
