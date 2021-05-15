@@ -10,10 +10,10 @@ int main(){
 	printf("Image height: %d\n",bmps[0]->header.biHeight );
 
 
-	uint8_t * * splt = split_portadora(bmps[0]);
+	uint8_t * * splt = split_secret(bmps[0],4);
 
 
-	uint8_t * pix = merge_portadora(splt,bmps[0]->header.biWidth,bmps[0]->header.biHeight);
+	uint8_t * pix = merge_secret(splt,4,bmps[0]->header.biWidth,bmps[0]->header.biHeight);
 
 	for (int i = 0; i < bmps[0]->header.biWidth*bmps[0]->header.biHeight; i++){
 		if (bmps[0]->pixels[i] != pix[i])

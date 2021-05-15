@@ -116,6 +116,35 @@ uint8_t * * split_secret(ImageBMP * secret, int k){
 
 }
 
+
+
+uint8_t * merge_secret(uint8_t * * secret, int k, uint32_t width, uint32_t height){
+
+	uint8_t * pixels = malloc(width*height);
+
+	uint32_t size =  height * width;
+
+	int n = size/k;
+
+
+	int pi = 0;
+
+	for (int i = 0; i < n; i++){
+
+		uint8_t * sub_array = secret[i];
+
+		for (int j = 0; j < k; j++){
+			pixels[pi] = sub_array[j];
+			pi++;
+		}
+
+		
+	}
+
+	return pixels;
+
+}
+
 uint8_t * * split_portadora(ImageBMP * portadora){
 
 	uint8_t * pixels = portadora->pixels;
