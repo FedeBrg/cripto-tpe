@@ -27,11 +27,27 @@ typedef struct{
 	uint32_t biClrUsed;
 	uint32_t biClrImportant;
 
+	uint32_t redChBitmask;
+	uint32_t greenChBitmask;
+	uint32_t blueChBitmask;
+	uint32_t alphaChBitmask;
+	uint32_t colorSpaceType;
+	uint8_t * colorSpaceEndpoints;
+	uint32_t gammaRedCh;
+	uint32_t gammaGreenCh;
+	uint32_t gammaBlueCh;
+	uint32_t intent;
+	uint32_t iccData;
+	uint32_t iccSize;
+	uint32_t reserved;
+
+
 }HeaderBMP;
 
 
 typedef struct {
     HeaderBMP header;
+    uint8_t * colorTable;
     uint8_t * pixels;
 } ImageBMP;
 
@@ -57,5 +73,10 @@ ImageBMP * * read_bmps(char * directory, int k);
 uint8_t * merge_portadora(uint8_t * * portadora, uint32_t width, uint32_t height);
 
 
-
+// Le pasas el [S1, S2, ..., Sn], donde n = (bmp->header.biHeight * bmp->header.biHeight)/k
+// y cada S = [s0, s1, ..., sk]
+// te devuelve un array para meter en la ImageBMP
 uint8_t * merge_secret(uint8_t * * secret, int k, uint32_t width, uint32_t height);
+
+
+void write_bmp(ImageBMP * bmp, char * filename);
