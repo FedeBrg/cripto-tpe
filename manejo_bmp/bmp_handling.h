@@ -5,7 +5,7 @@
 #include <string.h>
 
 // https://web.archive.org/web/20080912171714/http://www.fortunecity.com/skyscraper/windows/364/bmpffrmt.html
-
+#pragma pack(push, 1)
 typedef struct{
 	// BITMAPFILEHEADER
 	uint16_t bfType;
@@ -27,27 +27,14 @@ typedef struct{
 	uint32_t biClrUsed;
 	uint32_t biClrImportant;
 
-	uint32_t redChBitmask;
-	uint32_t greenChBitmask;
-	uint32_t blueChBitmask;
-	uint32_t alphaChBitmask;
-	uint32_t colorSpaceType;
-	uint8_t * colorSpaceEndpoints;
-	uint32_t gammaRedCh;
-	uint32_t gammaGreenCh;
-	uint32_t gammaBlueCh;
-	uint32_t intent;
-	uint32_t iccData;
-	uint32_t iccSize;
-	uint32_t reserved;
-
 
 }HeaderBMP;
+#pragma pack(pop)
 
 
 typedef struct {
     HeaderBMP header;
-    uint8_t * colorTable;
+    uint8_t * extraInfo;
     uint8_t * pixels;
 } ImageBMP;
 
@@ -63,6 +50,7 @@ uint8_t * * split_secret(ImageBMP * secret, int k);
 
 // Le pasas el path a UNA BMP y te la lee
 ImageBMP * read_bmp(char * filename);
+ImageBMP * read_bmp_new(char * filename);
 
 
 // Le pasas el k que te dan de entrada y el path a un DIRECTORIO y te devuelve un ImageBMP * * con todas las bmps

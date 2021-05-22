@@ -2,10 +2,6 @@
 
 
 
-
-
-
-
 ImageBMP * read_bmp(char * filename){
 
 	FILE * fp = fopen(filename, "rb");
@@ -30,32 +26,12 @@ ImageBMP * read_bmp(char * filename){
 	fread(&(bmp->header.biClrUsed), sizeof(bmp->header.biClrUsed), 1, fp);
 	fread(&(bmp->header.biClrImportant), sizeof(bmp->header.biClrImportant), 1, fp);
 
-	fread(&(bmp->header.redChBitmask), sizeof(bmp->header.redChBitmask), 1, fp);
-	fread(&(bmp->header.greenChBitmask), sizeof(bmp->header.greenChBitmask), 1, fp);
-	fread(&(bmp->header.blueChBitmask), sizeof(bmp->header.blueChBitmask), 1, fp);
-	fread(&(bmp->header.alphaChBitmask), sizeof(bmp->header.alphaChBitmask), 1, fp);
-	fread(&(bmp->header.colorSpaceType), sizeof(bmp->header.colorSpaceType), 1, fp);
-	bmp->header.colorSpaceEndpoints = malloc(36 * sizeof(uint8_t));
-	fread((bmp->header.colorSpaceEndpoints), 36 * sizeof(uint8_t), 1, fp);
-	fread(&(bmp->header.gammaRedCh), sizeof(bmp->header.gammaRedCh), 1, fp);
-	fread(&(bmp->header.gammaGreenCh), sizeof(bmp->header.gammaGreenCh), 1, fp);
-	fread(&(bmp->header.gammaBlueCh), sizeof(bmp->header.gammaBlueCh), 1, fp);
-	fread(&(bmp->header.intent), sizeof(bmp->header.intent), 1, fp);
-	fread(&(bmp->header.iccData), sizeof(bmp->header.iccData), 1, fp);
-	fread(&(bmp->header.iccSize), sizeof(bmp->header.iccSize), 1, fp);
-	fread(&(bmp->header.reserved), sizeof(bmp->header.reserved), 1, fp);
 
+	int s = bmp->header.bfOffBits - sizeof(HeaderBMP)+1;
 
-	uint32_t sizeColorTable = bmp->header.biClrUsed;
+	bmp->extraInfo = malloc(s);
 
-	bmp->colorTable = malloc(sizeof(*bmp->colorTable) * sizeColorTable*4);
-
-	//for (int i = 0; i < (sizeColorTable*4); i++){
-	//	fread(&(bmp->colorTable[i]), sizeof(uint8_t) , 1, fp);	
-
-	//}
-
-	fread(bmp->colorTable, sizeColorTable , 4, fp);
+	fread(bmp->extraInfo, s , 1, fp);
 
 
 	uint32_t size = bmp->header.biHeight * bmp->header.biWidth;
@@ -71,6 +47,8 @@ ImageBMP * read_bmp(char * filename){
     return bmp;
 
 }
+
+
 
 char * create_path(const char * directory, const char * name){
 
@@ -110,8 +88,6 @@ ImageBMP * * read_bmps(char * directory, int k){
     }
     return bmps;
 }
-
-
 void write_bmp(ImageBMP * bmp, char * filename){
 	
 	FILE * fp = fopen(filename, "wb");
@@ -134,25 +110,14 @@ void write_bmp(ImageBMP * bmp, char * filename){
 	fwrite(&(bmp->header.biClrUsed), sizeof(bmp->header.biClrUsed), 1, fp);
 	fwrite(&(bmp->header.biClrImportant), sizeof(bmp->header.biClrImportant), 1, fp);
 
-	fwrite(&(bmp->header.redChBitmask), sizeof(bmp->header.redChBitmask), 1, fp);
-	fwrite(&(bmp->header.greenChBitmask), sizeof(bmp->header.greenChBitmask), 1, fp);
-	fwrite(&(bmp->header.blueChBitmask), sizeof(bmp->header.blueChBitmask), 1, fp);
-	fwrite(&(bmp->header.alphaChBitmask), sizeof(bmp->header.alphaChBitmask), 1, fp);
-	fwrite(&(bmp->header.colorSpaceType), sizeof(bmp->header.colorSpaceType), 1, fp);
-	fwrite((bmp->header.colorSpaceEndpoints), 36 * sizeof(uint8_t), 1, fp);
-	fwrite(&(bmp->header.gammaRedCh), sizeof(bmp->header.gammaRedCh), 1, fp);
-	fwrite(&(bmp->header.gammaGreenCh), sizeof(bmp->header.gammaGreenCh), 1, fp);
-	fwrite(&(bmp->header.gammaBlueCh), sizeof(bmp->header.gammaBlueCh), 1, fp);
-	fwrite(&(bmp->header.intent), sizeof(bmp->header.intent), 1, fp);
-	fwrite(&(bmp->header.iccData), sizeof(bmp->header.iccData), 1, fp);
-	fwrite(&(bmp->header.iccSize), sizeof(bmp->header.iccSize), 1, fp);
-	fwrite(&(bmp->header.reserved), sizeof(bmp->header.reserved), 1, fp);
 
 
-	uint32_t sizeTable = bmp->header.biClrUsed;
+	int s = bmp->header.bfOffBits - sizeof(HeaderBMP) +1;
 
-    fwrite(bmp->colorTable, sizeTable, 4, fp);
 
+
+
+	fwrite(bmp->extraInfo, s , 1, fp);
 
 	uint32_t size = bmp->header.biHeight * bmp->header.biWidth;
 
@@ -342,7 +307,7 @@ int test_split_portadora(ImageBMP * portadora){
 
 
 ////////////////////////////////////////////////////////////////////////////////////////
-ImageBMP * read_bmp_new(const char * filename){
+ImageBMP * read_bmp_new(char * filename){
 
 	FILE * fp = fopen(filename, "rb");
 
@@ -352,14 +317,22 @@ ImageBMP * read_bmp_new(const char * filename){
 	fread(&(bmp->header), sizeof(bmp->header), 1, fp);
 
 
+	int s = bmp->header.bfOffBits - sizeof(HeaderBMP)+1;
 
-    bmp->pixels = malloc(sizeof(*bmp->pixels) * bmp->header.biSizeImage);
+	bmp->extraInfo = malloc(s);
+
+	fread(bmp->extraInfo, s , 1, fp);
 
 
-    int n = fseek(fp, 1062, SEEK_SET);
+	uint32_t size = bmp->header.biHeight * bmp->header.biWidth;
+
+	bmp->pixels = malloc(sizeof(*bmp->pixels) * size);
 
 
-    fread(bmp->pixels, bmp->header.biSizeImage, 1, fp);
+    int n = fseek(fp, bmp->header.bfOffBits, SEEK_SET);
+
+
+    fread(bmp->pixels, size , 1, fp);
 
     return bmp;
 }

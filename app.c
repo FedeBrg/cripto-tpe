@@ -5,9 +5,12 @@
 int main(){
 
 
-	ImageBMP * bmp = read_bmp("Marilyn.bmp");
+	ImageBMP * bmp = read_bmp("manejo_bmp/test_bmps/Marilyn.bmp");
 
-	printf("%d\n",bmp->header.biSize );
+
+
+
+	//printf("%d\n",bmp->header.biSize );
 
 	for (int i = 0; i < 256*3; ++i){
 		//printf("%x ",bmp->colorTable[i] );
