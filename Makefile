@@ -19,4 +19,4 @@ enc: encrypt/encrypt.c
 	gcc -c -o encrypt/encrypt.o encrypt/encrypt.c
 
 clean:
-	rm app galois/galois.o lagrange/lagrange.o manejo_bmp/bmp_handling.o decrypt/decrypt.o encrypt/encrypt.o
+	rm app galois/galois.o lagrange/lagrange.o manejo_bmp/bmp_handling.o decrypt/decrypt.o encrypt/encrypt.o */*.bmp

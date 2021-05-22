@@ -43,7 +43,7 @@ int get_parity(int src[]){
 }
 
 // Funcion de encripcion, la escribo toda aca, despues hay que modularizarlo
-void encrypt(uint8_t n, uint8_t k, char * directoryName, ImageBMP * secretImageBmp){
+ImageBMP * * encrypt(uint8_t n, uint8_t k, char * directoryName, ImageBMP * secretImageBmp){
     
     // de la imagen secreta, tomo sus pixeles
     uint8_t * secretImage = secretImageBmp->pixels;
@@ -76,7 +76,8 @@ void encrypt(uint8_t n, uint8_t k, char * directoryName, ImageBMP * secretImageB
     // ######## TODO ESTO ES PORQUE NO ME ANDA EL READ_BMPS, LO DEJO PARA SEGUIR PROBANDO YO ########
 
     // leo las bmps que seran utilizadas como portadoras
-    ImageBMP ** carriers = read_bmps(directoryName, k);
+    ImageBMP ** carriers = read_bmps(directoryName, n);
+
 
     // defino el polinomio que luego sera evaluado
     uint8_t polynomial[k];
@@ -206,6 +207,7 @@ void encrypt(uint8_t n, uint8_t k, char * directoryName, ImageBMP * secretImageB
         blockNumber++;
     }
 
+
     // cuando salgo de ese loop, ya tengo las portadoras con todos sus bloques modificados
     for(int i = 0; i < n; i++){
         // con los bytes modificados, llamo a la funcion que crea las portadoras modificadas
@@ -214,11 +216,8 @@ void encrypt(uint8_t n, uint8_t k, char * directoryName, ImageBMP * secretImageB
         // piso los pixeles de la carrier image con los pixeles nuevos
         carriers[i] -> pixels = mergedCarrier;
 
-        // genero el nombre de la portadora
-        char name[15];
-        sprintf(name, "portadora%d.bmp", i);
-
-        // llamo al write_bmp para que genere la portadora modificada en formato bmp
-        write_bmp(carriers[i], name);
     }
+
+    return carriers;
+
 }

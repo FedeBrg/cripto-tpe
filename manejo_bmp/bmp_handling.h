@@ -68,3 +68,6 @@ uint8_t * merge_secret(uint8_t * * secret, int k, uint32_t width, uint32_t heigh
 
 
 void write_bmp(ImageBMP * bmp, char * filename);
+
+
+void write_bmps(ImageBMP * bmp, char * filename, int k);

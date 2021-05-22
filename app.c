@@ -1,24 +1,44 @@
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+
 #include "lagrange/lagrange.h"
 #include "galois/galois.h"
 #include "manejo_bmp/bmp_handling.h"
+#include "encrypt/encrypt.h"
+
 
 int main(){
 
+	int k = 4;
+	int n = 6;
+	char * out_dir = "output";
+	char * secret_name = "manejo_bmp/test_bmps/Eva.bmp";
+	char * portadoras_dir = "manejo_bmp/test";
 
-	ImageBMP * bmp = read_bmp("manejo_bmp/test_bmps/Marilyn.bmp");
+	ImageBMP * bmp = read_bmp(secret_name);
 
 
 
+	ImageBMP * * carriers = encrypt(n,k,portadoras_dir,bmp);
 
-	//printf("%d\n",bmp->header.biSize );
 
-	for (int i = 0; i < 256*3; ++i){
-		//printf("%x ",bmp->colorTable[i] );
+
+	struct stat st = {0};
+    if (stat(out_dir, &st) == -1) {
+        mkdir(out_dir, 0700);
+    }
+
+	for (int i = 0; i < n; i++){
+		char name[30];
+		sprintf(name, "./%s/portadora%d.bmp", out_dir,i);
+		write_bmp(carriers[i], name);
 	}
 
 
-	write_bmp(bmp, "test.bmp");
 
+
+	
 
 	// uint8_t * * splt = split_secret(bmps[0],4);
 

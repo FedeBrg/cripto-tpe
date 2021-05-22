@@ -88,6 +88,8 @@ ImageBMP * * read_bmps(char * directory, int k){
     }
     return bmps;
 }
+
+
 void write_bmp(ImageBMP * bmp, char * filename){
 	
 	FILE * fp = fopen(filename, "wb");
@@ -130,7 +132,6 @@ void write_bmp(ImageBMP * bmp, char * filename){
 
     
 }
-
 
 
 
