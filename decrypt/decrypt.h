@@ -3,11 +3,14 @@
 //
 
 #include <stdint-gcc.h>
+#include <stdio.h>
+
 
 #ifndef CRIPTO_DECRYPT_H
 #define CRIPTO_DECRYPT_H
 
 #endif //CRIPTO_DECRYPT_H
 
+void decrypt(int k, char* path);
 char* getTFromImage(int k);
 unsigned char getYFromBlock(uint8_t w, uint8_t v, uint8_t u);
