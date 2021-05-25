@@ -145,7 +145,7 @@ ImageBMP * * encrypt(uint8_t n, uint8_t k, char * directoryName, ImageBMP * secr
 
             // hago la evaluacion en p-esimo polinomio
             for(int u = 0; u < k; u++){
-                polynomialEvaluated = suma_galois(polynomialEvaluated, mult_galois(polynomial[u], (uint8_t) pow(xValue, u)));
+                polynomialEvaluated = suma_galois(polynomialEvaluated, mult_galois(polynomial[u], pot_galois(xValue, u)));
             }
 
             // guardo el valor del polinomio evaluado junto con el valor original del pixel X

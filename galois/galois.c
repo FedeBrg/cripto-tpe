@@ -57,3 +57,15 @@ uint8_t div_galois(uint8_t x, uint8_t y){
 
 }
 
+uint8_t pot_galois(uint8_t x,uint8_t y){
+
+    uint8_t pot = 1;
+
+    for (int i = 0; i < y; i++){
+        pot = mult_galois(pot,x);
+    }
+
+    return pot;
+
+}
+
