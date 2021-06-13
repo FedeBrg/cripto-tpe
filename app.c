@@ -20,7 +20,17 @@ int main(){
 
 //	ImageBMP * * carriers = encrypt(n,k,portadoras_dir,bmp);
 
-	decrypt(k,portadoras_dir);
+
+	uint8_t y[4];
+    y[0]= suma_galois(1, suma_galois(mult_galois(2,9), suma_galois(mult_galois(3, pot_galois(9,2)), mult_galois(4, pot_galois(9,3)))));
+    y[1]= suma_galois(1, suma_galois(mult_galois(2,17), suma_galois(mult_galois(3, pot_galois(17,2)), mult_galois(4, pot_galois(17,3)))));
+    y[2]= suma_galois(1, suma_galois(mult_galois(2,26), suma_galois(mult_galois(3, pot_galois(26,2)), mult_galois(4, pot_galois(26,3)))));
+    y[3]= suma_galois(1, suma_galois(mult_galois(2,34), suma_galois(mult_galois(3, pot_galois(34,2)), mult_galois(4, pot_galois(34,3)))));
+    uint8_t x[]={9,17,26,34};
+    uint8_t x1=lagrange(4,x,y);
+    printf("%d\n",x1);
+
+	//decrypt(k,portadoras_dir);
 
     char name[30];
     sprintf(name, "./secret.bmp", out_dir);

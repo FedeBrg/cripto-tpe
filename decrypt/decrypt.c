@@ -18,31 +18,9 @@ void decrypt(int k, char path[]){
     //k es el k y path es donde estan las imagenes
     k=6;
     //magia para levantar las imagenes
-    ImageBMP **images; //malloc
+    ImageBMP **images = read_bmps("manejo_bmp/secret/",6); //malloc
 //    images = read_bmps("../manejo_bmp/test_bmps/",k);
     //leo imagenes
-
-
-
-    ImageBMP * portadora1 = read_bmp_new("../manejo_bmp/secret/Alfredshare.bmp");
-    printf("\n%d,%d\n",portadora1->header.biHeight,portadora1->header.biWidth);
-    printf("\n%d,%d\n",portadora1->header.biHeight,portadora1->header.biWidth);
-    ImageBMP * portadora2 = read_bmp_new("../manejo_bmp/secret/Evashare.bmp");
-    ImageBMP * portadora3 = read_bmp_new("../manejo_bmp/secret/Facundoshare.bmp");
-    ImageBMP * portadora4 = read_bmp_new("../manejo_bmp/secret/Gustavoshare.bmp");
-    ImageBMP * portadora5 = read_bmp_new("../manejo_bmp/secret/Marilynshare.bmp");
-    ImageBMP * portadora6 = read_bmp_new("../manejo_bmp/secret/Jamesshare.bmp");
-
-    // hago el array de punteros con la imagenes, aca despues hay que hacer el read_bmps
-    ImageBMP * carriers[6];
-    carriers[0] = portadora1;
-    carriers[1] = portadora2;
-    carriers[2] = portadora3;
-    carriers[3] = portadora4;
-    carriers[4] = portadora5;
-    carriers[5] = portadora6;
-
-    printf("1");
 
 
     images=carriers;
@@ -55,7 +33,7 @@ void decrypt(int k, char path[]){
     }
     //obtengo los bloques
 
-    unsigned int length=(images[0]->header.biHeight * images[0]->header.biHeight)/k;
+    unsigned int length=(images[0]->header.biHeight * images[0]->header.biHeight)/4;
 //    uint8_t y[length][k];//array con los valores de Y arrancando desde arriba a la dercha
 //    uint8_t x[length][k];//malloc?
 //    uint8_t s[length]; //probablemente sea con memeoria
