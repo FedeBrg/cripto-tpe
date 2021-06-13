@@ -21,6 +21,14 @@ int main(){
 //	ImageBMP * * carriers = encrypt(n,k,portadoras_dir,bmp);
 
 
+	// for(int i = 0; i<255 ;i++){
+	// 	uint8_t x = suma_galois(mult_galois(100,i),100);
+	// 	if(x==0){
+	// 		printf("%d\n",i);
+	// 		break;
+	// 	}
+	// }
+
 	uint8_t y[4];
     y[0]= suma_galois(1, suma_galois(mult_galois(2,9), suma_galois(mult_galois(3, pot_galois(9,2)), mult_galois(4, pot_galois(9,3)))));
     y[1]= suma_galois(1, suma_galois(mult_galois(2,17), suma_galois(mult_galois(3, pot_galois(17,2)), mult_galois(4, pot_galois(17,3)))));
@@ -33,7 +41,7 @@ int main(){
 	//decrypt(k,portadoras_dir);
 
     char name[30];
-    sprintf(name, "./secret.bmp", out_dir);
+    //sprintf(name, "./secret.bmp", out_dir);
 //    write_bmp(secret, name);
 
 //	struct stat st = {0};

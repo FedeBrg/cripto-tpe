@@ -28,22 +28,29 @@ uint8_t lagrange(int k, uint8_t X[], uint8_t Y[]){
 
 	uint8_t prod = 1;
 	uint8_t sum = 0;
-
+    int counter=0;
 	for (int i = 0; i < k; i++){
 		
 		for (int q = 0; q < k; q++){
 			if (i != q){
-				//printf("A\n");
-				uint8_t a = suma_galois(X[i], -X[q]);
+                //printf("A\n");
+				uint8_t a = suma_galois(X[i], X[q]);
 				//printf("B\n");
 				//printf("%d\n",a );
-				uint8_t b = div_galois(-X[q],a);
-				//printf("C\n");
-				prod = mult_galois(prod,b);
-				//printf("D\n");
+                if (a!=0){
+                    uint8_t b = div_galois(X[q],a);
+                    //printf("C\n");
+                    prod = mult_galois(prod,b);
+                    //printf("D\n");
+                }else{
+                    counter++;
+                }
+
 			}
 			
 		}
+//		if (counter!=0)
+//        printf("%d ",counter);
 
 		uint8_t c = mult_galois(Y[i], prod);
 		sum = suma_galois(sum, c);
@@ -56,5 +63,47 @@ uint8_t lagrange(int k, uint8_t X[], uint8_t Y[]){
 
 
 	return sum;
+
+}
+
+uint8_t lagrange_turbina(int k,int r, uint8_t X[], uint8_t Y[]){
+
+    uint8_t prod = 1;
+    uint8_t sum = 0;
+    int counter=0;
+    for (int i = 0; i < k-r; i++){
+
+        for (int q = 0; q < k-r; q++){
+            if (i != q){
+                //printf("A\n");
+                uint8_t a = suma_galois(X[i], -X[q]);
+                //printf("B\n");
+                //printf("%d\n",a );
+                if (a!=0){
+                    uint8_t b = div_galois(-X[q],a);
+                    //printf("C\n");
+                    prod = mult_galois(prod,b);
+                    //printf("D\n");
+                }else{
+                    counter++;
+                }
+
+            }
+
+        }
+//		if (counter!=0)
+//        printf("%d ",counter);
+
+        uint8_t c = mult_galois(Y[i], prod);
+        sum = suma_galois(sum, c);
+
+
+        prod = 1;
+
+
+    }
+
+    sum= mult_galois(sum,((k-1-r)%2==0?1:-1));
+    return sum;
 
 }
