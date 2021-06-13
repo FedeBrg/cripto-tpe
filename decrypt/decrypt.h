@@ -13,4 +13,5 @@
 
 void decrypt(int k, char* path);
 char* getTFromImage(int k);
-unsigned char getYFromBlock(uint8_t w, uint8_t v, uint8_t u);
+uint8_t getYFromBlock(uint8_t w, uint8_t v, uint8_t u);
+void test_lagrange();
