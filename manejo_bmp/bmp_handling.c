@@ -27,7 +27,7 @@ ImageBMP * read_bmp(char * filename){
 	fread(&(bmp->header.biClrImportant), sizeof(bmp->header.biClrImportant), 1, fp);
 
 
-	int s = bmp->header.bfOffBits - sizeof(HeaderBMP)+1;
+	unsigned int s = bmp->header.bfOffBits - sizeof(HeaderBMP)+1;
 
 	bmp->extraInfo = malloc(s);
 
@@ -114,7 +114,7 @@ void write_bmp(ImageBMP * bmp, char * filename){
 
 
 
-	int s = bmp->header.bfOffBits - sizeof(HeaderBMP) +1;
+	unsigned int s = bmp->header.bfOffBits - sizeof(HeaderBMP) +1;
 
 
 
@@ -142,7 +142,7 @@ uint8_t * * split_secret(ImageBMP * secret, int k){
 
 	uint32_t size = secret->header.biHeight * secret->header.biWidth;
 
-	int n = size/k;
+	unsigned int n = size/k;
 
 	uint8_t * * splitted = malloc(n * sizeof(uint8_t *));
 
@@ -172,7 +172,7 @@ uint8_t * merge_secret(uint8_t * * secret, int k, uint32_t width, uint32_t heigh
 
 	uint32_t size =  height * width;
 
-	int n = size/k;
+	unsigned int n = size/k;
 
 
 	int pi = 0;
@@ -195,38 +195,63 @@ uint8_t * merge_secret(uint8_t * * secret, int k, uint32_t width, uint32_t heigh
 
 uint8_t * * split_portadora(ImageBMP * portadora){
 
-	uint8_t * pixels = portadora->pixels;
+    uint8_t * pixels = portadora->pixels;
 
-	uint32_t width = portadora->header.biWidth;
-	uint32_t height = portadora->header.biHeight;
+    uint32_t width = portadora->header.biWidth;
+    uint32_t height = portadora->header.biHeight;
 
-	int n = width*height/4;
-
-
-	uint8_t * * splitted = malloc(n * sizeof(uint8_t *));
-
-	int pi = 0;
+    int n = width*height/4;
 
 
-	for (int i = 0; i < height-1; i+=2){
-		for (int j = 0; j < width-1; j+=2){
-			uint8_t * sub_array = malloc(4 * sizeof(uint8_t));
-			sub_array[0] = pixels[(i*width + j)];
-			sub_array[1] = pixels[(i*width + j)+1];
-			sub_array[2] = pixels[(i*width + j)+width];
-			sub_array[3] = pixels[(i*width + j)+1+width];
+    uint8_t * * splitted = malloc(n * sizeof(uint8_t *));
 
-			splitted[pi] = sub_array;
-			
-
-			pi++;
+    int pi = 0;
 
 
-		}
+    uint8_t * * aux = malloc(height * sizeof(uint8_t *));
 
-	}
+    for (int i = 0; i < height; i++){
+        uint8_t * auxa = malloc(width*sizeof(uint8_t));
+        for (int j = 0; j < width; j++){
+            auxa[j]=pixels[j+i*width];
+        }
+        aux[i] = auxa;
+    }
 
-	return splitted;
+    uint8_t * * auxb = malloc(height * sizeof(uint8_t*));
+    for (int i = 0; i < height; i++){
+        auxb[i] = aux[height-i-1];
+    }
+
+    uint8_t * auxc = malloc(sizeof(uint8_t)*width*height);
+    for (int i = 0; i < height; i++){
+        for (int j = 0; j < width; j++){
+            auxc[j+i*width]=auxb[i][j];
+        }
+    }
+
+    pixels = auxc;
+
+
+    for (int i = 0; i < height-1; i+=2){
+        for (int j = 0; j < width-1; j+=2){
+            uint8_t * sub_array = malloc(4 * sizeof(uint8_t));
+            sub_array[0] = pixels[(i*width + j)];             // X
+            sub_array[1] = pixels[(i*width + j)+1];         // Y
+            sub_array[2] = pixels[(i*width + j)+width];     // V
+            sub_array[3] = pixels[(i*width + j)+1+width];     // U
+
+            splitted[pi] = sub_array;
+
+
+            pi++;
+
+
+        }
+
+    }
+
+    return splitted;
 }
 
 uint8_t * merge_portadora(uint8_t * * portadora, uint32_t width, uint32_t height ){
@@ -266,7 +291,7 @@ int test_split_secret(ImageBMP * secret, int k){
 
 	uint8_t * * splitted = split_secret(secret, k);
 
-	int size = secret->header.biWidth * secret->header.biHeight;
+	unsigned int size = secret->header.biWidth * secret->header.biHeight;
 
 	int n = size/k;
 
@@ -289,7 +314,7 @@ int test_split_portadora(ImageBMP * portadora){
 	uint32_t width = portadora->header.biWidth;
 	uint32_t height = portadora->header.biHeight;
 
-	int n = width*height/4;
+	unsigned int n = width*height/4;
 
 	int pi = 0;
 
@@ -318,7 +343,7 @@ ImageBMP * read_bmp_new(char * filename){
 	fread(&(bmp->header), sizeof(bmp->header), 1, fp);
 
 
-	int s = bmp->header.bfOffBits - sizeof(HeaderBMP)+1;
+	unsigned int s = bmp->header.bfOffBits - sizeof(HeaderBMP)+1;
 
 	bmp->extraInfo = malloc(s);
 
