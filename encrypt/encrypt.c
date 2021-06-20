@@ -78,7 +78,6 @@ ImageBMP * * encrypt(uint8_t n, uint8_t k, char * directoryName, ImageBMP * secr
     // leo las bmps que seran utilizadas como portadoras
     ImageBMP ** carriers = read_bmps(directoryName, n);
 
-
     // defino el polinomio que luego sera evaluado
     uint8_t polynomial[k];
 
@@ -87,6 +86,9 @@ ImageBMP * * encrypt(uint8_t n, uint8_t k, char * directoryName, ImageBMP * secr
 
     // array de punteros que luego tendran los bloques de cada una de las n portadoras
     uint8_t ** allCarriersBlocks[n];
+
+    // el flag nos va a servir para marcar cuando cambiamos un valor del pixel X y asi poder escribirlo
+    uint8_t xValueChanged = 0;
 
     // genero un array de n posiciones con los bloques en modo XWVU de todas las portadoras
     for(int i = 0; i < n; i++){
@@ -131,6 +133,10 @@ ImageBMP * * encrypt(uint8_t n, uint8_t k, char * directoryName, ImageBMP * secr
             // ningun otro xValue previamente analizado
             for(int u = 0; u < i; u++){
                 if(allCarriersBlocks[u][blockNumber][0] == xValue){
+                    // marcamos el flag para decir que cambiamos el xValue
+                    xValueChanged = 1;
+
+                    // incrementamos el xValue para que no sea igual al anterior
                     xValue += 1;
                     
                     // si es mayor o igual a 255 tengo que reiniciar el valor del pixel
@@ -201,6 +207,12 @@ ImageBMP * * encrypt(uint8_t n, uint8_t k, char * directoryName, ImageBMP * secr
             allCarriersBlocks[i][blockNumber][1] = bin_to_dec(binaryW, 8);
             allCarriersBlocks[i][blockNumber][2] = bin_to_dec(binaryV, 8);
             allCarriersBlocks[i][blockNumber][3] = bin_to_dec(binaryU, 8);
+
+            // si resulta que cambiamos el xValue, tenemos que guardar el nuevo valor en el pixel X
+            if(xValueChanged){
+                allCarriersBlocks[i][blockNumber][0] = xValue;
+                xValueChanged = 0;
+            }
         }
 
         // incrementamos el contador de bloque
