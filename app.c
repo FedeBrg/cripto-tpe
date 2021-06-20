@@ -29,18 +29,21 @@ int main(){
 
 
 
-	ImageBMP * * carriers = encrypt(n,k,portadoras_dir,bmp);
+	//ImageBMP * * carriers = encrypt(n,k,portadoras_dir,bmp);
 
-	struct stat st = {0};
-   if (stat(out_dir, &st) == -1) {
-       mkdir(out_dir, 0700);
-   }
 
-	for (int i = 0; i < n; i++){
-		char name[30];
-		sprintf(name, "./%s/portadora%d.bmp", out_dir,i);
-		write_bmp(carriers[i], name);
-	}
+    decrypt(6,"manejo_bmp/secret");
+
+	// struct stat st = {0};
+ //   if (stat(out_dir, &st) == -1) {
+ //       mkdir(out_dir, 0700);
+ //   }
+
+	// for (int i = 0; i < n; i++){
+	// 	char name[30];
+	// 	sprintf(name, "./%s/portadora%d.bmp", out_dir,i);
+	// 	write_bmp(carriers[i], name);
+	// }
 
  	//test_lagrange_4();
 

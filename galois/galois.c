@@ -1,4 +1,6 @@
 #include "galois.h"
+#include <stdlib.h>
+
 
 
 // https://en.wikipedia.org/wiki/Finite_field_arithmetic

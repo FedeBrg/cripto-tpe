@@ -21,19 +21,19 @@ void decrypt(int k, char path[]){
 //    images = read_bmps("../manejo_bmp/test_bmps/",k);
 //    images=read_bmps("../manejo_bmp/secret",k);
 
-//    ImageBMP * portadora1 = read_bmp("manejo_bmp/secret/Alfredshare.bmp");
-//    ImageBMP * portadora2 = read_bmp("manejo_bmp/secret/Evashare.bmp");
-//    ImageBMP * portadora3 = read_bmp("manejo_bmp/secret/Audreyshare.bmp");
-//    ImageBMP * portadora4 = read_bmp("manejo_bmp/secret/Gustavoshare.bmp");
-//    ImageBMP * portadora5 = read_bmp("manejo_bmp/secret/Marilynshare.bmp");
-//    ImageBMP * portadora6 = read_bmp("manejo_bmp/secret/Jamesshare.bmp");
+   ImageBMP * portadora1 = read_bmp("manejo_bmp/secret/Alfredshare.bmp");
+   ImageBMP * portadora2 = read_bmp("manejo_bmp/secret/Evashare.bmp");
+   ImageBMP * portadora3 = read_bmp("manejo_bmp/secret/Audreyshare.bmp");
+   ImageBMP * portadora4 = read_bmp("manejo_bmp/secret/Gustavoshare.bmp");
+   ImageBMP * portadora5 = read_bmp("manejo_bmp/secret/Marilynshare.bmp");
+   ImageBMP * portadora6 = read_bmp("manejo_bmp/secret/Jamesshare.bmp");
 
-     ImageBMP * portadora1 = read_bmp("output/portadora0.bmp");
-     ImageBMP * portadora2 = read_bmp("output/portadora1.bmp");
-     ImageBMP * portadora3 = read_bmp("output/portadora2.bmp");
-     ImageBMP * portadora4 = read_bmp("output/portadora3.bmp");
-     ImageBMP * portadora5 = read_bmp("output/portadora4.bmp");
-     ImageBMP * portadora6 = read_bmp("output/portadora5.bmp");
+     // ImageBMP * portadora1 = read_bmp("output/portadora0.bmp");
+     // ImageBMP * portadora2 = read_bmp("output/portadora1.bmp");
+     // ImageBMP * portadora3 = read_bmp("output/portadora2.bmp");
+     // ImageBMP * portadora4 = read_bmp("output/portadora3.bmp");
+     // ImageBMP * portadora5 = read_bmp("output/portadora4.bmp");
+     // ImageBMP * portadora6 = read_bmp("output/portadora5.bmp");
 
     // hago el array de punteros con la imagenes, aca despues hay que hacer el read_bmps
     ImageBMP * carriers[6];
