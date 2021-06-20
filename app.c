@@ -21,49 +21,30 @@ int main(){
 
 
     char name[30];
-    //sprintf(name, "./secret.bmp", out_dir);
-//    write_bmp(secret, name);
+
 
     llenar_tablas();
 
 
 
 
-	//ImageBMP * * carriers = encrypt(n,k,portadoras_dir,bmp);
-
-
-    decrypt(6,"manejo_bmp/secret");
-
-	// struct stat st = {0};
- //   if (stat(out_dir, &st) == -1) {
- //       mkdir(out_dir, 0700);
- //   }
-
-	// for (int i = 0; i < n; i++){
-	// 	char name[30];
-	// 	sprintf(name, "./%s/portadora%d.bmp", out_dir,i);
-	// 	write_bmp(carriers[i], name);
-	// }
-
- 	//test_lagrange_4();
+	ImageBMP * * carriers = encrypt(n,k,portadoras_dir,bmp);
 
 
 
 
+	struct stat st = {0};
+   if (stat(out_dir, &st) == -1) {
+       mkdir(out_dir, 0700);
+   }
 
-	
+	for (int i = 0; i < n; i++){
+		char name[30];
+		sprintf(name, "./%s/portadora%d.bmp", out_dir,i);
+		write_bmp(carriers[i], name);
+	}
 
-	// uint8_t * * splt = split_secret(bmps[0],4);
 
-
-	// uint8_t * pix = merge_secret(splt,4,bmps[0]->header.biWidth,bmps[0]->header.biHeight);
-
-	// for (int i = 0; i < bmps[0]->header.biWidth*bmps[0]->header.biHeight; i++){
-	// 	if (bmps[0]->pixels[i] != pix[i])
-	// 	{
-	// 		printf("ERROR\n");
-	// 	}
-	// }
-	// printf("A\n");
+     decrypt(6,"manejo_bmp/secret");
 
 }
