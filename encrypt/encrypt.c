@@ -96,7 +96,7 @@ ImageBMP * * encrypt(uint8_t n, uint8_t k, char * directoryName, ImageBMP * secr
     // con las lineas de abajo vamos a calcular las F(x) de cada bloque de la imagen secreta
 
     // mientras estemos dentro del tamaño de la imagen...
-    for(int f = 0; f < secretBlocksQuantity; f += k){
+    for(int f = 0; f < size; f += k){
 
         // por cada k bytes de la imagen secreta (un bloque)
         for(int j = 0; j < k; j++){
