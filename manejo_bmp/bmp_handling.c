@@ -303,13 +303,13 @@ uint8_t * * split_portadora(ImageBMP * portadora){
 	uint8_t * * splitted = malloc(n * sizeof(uint8_t *));
 	int k = 0;
 
-	for (int i = height-1; i >0; i-=2){
+	for (int i = height-1; i > 0; i-=2){
 		for (int j = 0; j < width-1; j+=2){
 			uint8_t * sub_array = malloc(4 * sizeof(uint8_t));
-			sub_array[0] = pixels[i*width + j];
-			sub_array[1] = pixels[i*width + j + 1];
-			sub_array[2] = pixels[i*width + j - width];
-			sub_array[3] = pixels[i*width + j + 1 - width];
+			sub_array[0] = pixels[i*width + j];					// X
+			sub_array[1] = pixels[i*width + j + 1];				// W
+			sub_array[2] = pixels[i*width + j - width];			// V
+			sub_array[3] = pixels[i*width + j + 1 - width];		// U
 
 			splitted[k] = sub_array;
 			k++;
@@ -328,13 +328,14 @@ uint8_t * merge_portadora(uint8_t * * portadora, uint32_t width, uint32_t height
 	int pi = 0;
 
 
-	for (int i = height -1; i > 0; i-=2){
+	for (int i = height-1; i > 0; i-=2){
 		for (int j = 0; j < width-1; j+=2){
 			uint8_t * sub_array = portadora[pi];
-			pixels[(i*width + j)] = sub_array[0];
-			pixels[(i*width + j)+1] = sub_array[1];
-			pixels[(i*width + j)-width] = sub_array[2];
-			pixels[(i*width + j)+1-width] = sub_array[3];
+
+			pixels[(i*width + j)] = sub_array[0];			// X
+			pixels[(i*width + j)+1] = sub_array[1];			// W
+			pixels[(i*width + j)-width] = sub_array[2];		// V
+			pixels[(i*width + j)+1-width] = sub_array[3];	// U
 			
 
 			pi++;
@@ -358,13 +359,11 @@ uint8_t * merge_portadora_old(uint8_t * * portadora, uint32_t width, uint32_t he
 	for (int i = 0; i < height-1; i+=2){
 		for (int j = 0; j < width-1; j+=2){
 			uint8_t * sub_array = portadora[pi];
-			pixels[(i*width + j)] = sub_array[0];
-			pixels[(i*width + j)+1] = sub_array[1];
-			pixels[(i*width + j)+width] = sub_array[2];
-			pixels[(i*width + j)+1+width] = sub_array[3];
 
-			//splitted[pi] = sub_array;
-			
+			pixels[(i*width + j)] = sub_array[0];			// X
+			pixels[(i*width + j)+1] = sub_array[1];			// U
+			pixels[(i*width + j)+width] = sub_array[2];		// V
+			pixels[(i*width + j)+1+width] = sub_array[3];	// W	
 
 			pi++;
 
@@ -445,45 +444,4 @@ int test_split_portadora(ImageBMP * portadora){
 	}
 
 }
-
-
-
-
-
-
-////////////////////////////////////////////////////////////////////////////////////////
-ImageBMP * read_bmp_new(char * filename){
-
-	FILE * fp = fopen(filename, "rb");
-
-	ImageBMP * bmp = malloc(sizeof(*bmp));
-
-
-	fread(&(bmp->header), sizeof(bmp->header), 1, fp);
-
-
-	unsigned int s = bmp->header.bfOffBits - sizeof(HeaderBMP)+1;
-
-	bmp->extraInfo = malloc(s);
-
-	fread(bmp->extraInfo, s , 1, fp);
-
-
-	uint32_t size = bmp->header.biHeight * bmp->header.biWidth;
-
-	bmp->pixels = malloc(sizeof(*bmp->pixels) * size);
-
-
-    int n = fseek(fp, bmp->header.bfOffBits, SEEK_SET);
-
-
-    fread(bmp->pixels, size , 1, fp);
-
-    return bmp;
-}
-
-
-
-
-
 

@@ -17,7 +17,6 @@ uint8_t * tabla_mult[256];
 
 
 uint8_t suma_galois(uint8_t x, uint8_t y){
-    //printf("%d,%d\n",x,y );
     return x ^ y;
 }
 
@@ -49,14 +48,7 @@ uint8_t mult_galois_tabla(uint8_t x, uint8_t y){
 }
 
 void llenar_tablas(){
-    for (int i = 1; i < 256; i++){
-        uint8_t inv = 1;
 
-        while(mult_galois_tabla(i,inv)!=1){
-            inv++;
-        }
-        tabla_inv[i] = inv;    
-    }
 
     for (int i = 0; i < 256; i++){
         tabla_mult[i] = malloc(256 * sizeof(uint8_t));
@@ -64,6 +56,16 @@ void llenar_tablas(){
             tabla_mult[i][j] = mult_galois_tabla(i,j);
         }
     }
+
+    for (int i = 1; i < 256; i++){
+        uint8_t inv = 1;
+
+        while(mult_galois(i,inv)!=1){
+            inv++;
+        }
+        tabla_inv[i] = inv;    
+    }
+
 
 }
 
@@ -73,21 +75,9 @@ uint8_t inv_galois(uint8_t x){
 }
 
 
-uint8_t inv_galois_old(uint8_t x){
-    uint8_t inv = 1;
-
-    while(mult_galois(x,inv)!=1){
-        inv++;
-    }
-    return inv;
-
-}
-
 uint8_t div_galois(uint8_t x, uint8_t y){
 
-    uint8_t inv = inv_galois(y);
-
-    return mult_galois(x,inv);
+    return mult_galois(x,inv_galois(y));
 
 }
 
