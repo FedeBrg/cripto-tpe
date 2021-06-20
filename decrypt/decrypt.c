@@ -69,17 +69,17 @@ void decrypt(int k, char path[]){
 
     for (int i = 0; i < length/k; ++i) {
         for (int j = 0; j < k; ++j) {
-            for(int u = 0; u < j; u++){ //cambio de repetidos
-                if(blocks[u][i][0] == blocks[j][i][0]){
-                    blocks[j][i][0] += 1;
-                    // si es mayor o igual a 255 tengo que reiniciar el valor del pixel
-                    if(blocks[j][i][0] >= 255){
-                        blocks[j][i][0] = 0;
-                    }
-                    // si encuentro uno igual quiero volver a analizar con todos los pixeles anteriores
-                    u = 0;
-                }
-            }
+//            for(int u = 0; u < j; u++){ //cambio de repetidos
+//                if(blocks[u][i][0] == blocks[j][i][0]){
+//                    blocks[j][i][0] += 1;
+//                    // si es mayor o igual a 255 tengo que reiniciar el valor del pixel
+//                    if(blocks[j][i][0] >= 255){
+//                        blocks[j][i][0] = 0;
+//                    }
+//                    // si encuentro uno igual quiero volver a analizar con todos los pixeles anteriores
+//                    u = 0;
+//                }
+//            }
             xOne[j]=blocks[j][i][0];
             yOne[j]=getYFromBlock( blocks[j][i][1], blocks[j][i][2], blocks[j][i][3]);
         }
@@ -101,7 +101,7 @@ void decrypt(int k, char path[]){
                     xOne[l]=xTmp;
                     yOne[l]=yTmp;
                     if(xOne[l]==0){
-                        yOne[l] = div_galois(suma_galois(yOne[l], s[i*k+j-1]), 64);
+                        yOne[l] = 0;
                     }else{
                         yOne[l] = div_galois(suma_galois(yOne[l], s[i*k+j-1]), xOne[l]);
                     }
