@@ -6,7 +6,7 @@
 #ifndef CRIPTO_DECRYPT_H
 #define CRIPTO_DECRYPT_H
 
-#endif //CRIPTO_DECRYPT_H
+#endif //CRIPTO_DECRYPT_H 
 
 void decrypt(int k, char* path);
 char* getTFromImage(int k);
