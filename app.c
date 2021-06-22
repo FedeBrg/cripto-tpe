@@ -14,6 +14,7 @@ int main(){
 	int n = 6;
 	char * out_dir = "output";
 	char * secret_name = "manejo_bmp/test_bmps/Eva.bmp";
+	//char * secret_name = "secret.bmp";
 	char * portadoras_dir = "manejo_bmp/test";
 
 	ImageBMP * bmp = read_bmp(secret_name);

@@ -50,44 +50,40 @@ void decrypt(int k, char path[]){
     uint8_t xOne[k];
     uint8_t yOne[k];
 
-    for (int i = 0; i < length/k; ++i) {
-        for (int j = 0; j < k; ++j) {
+    for (int i = 0; i < length/k; i++) {
+        for (int j = 0; j < k; j++) {
             xOne[j]=blocks[j][i][0];
             yOne[j]=getYFromBlock( blocks[j][i][1], blocks[j][i][2], blocks[j][i][3]);
         }
-        s[i*k] = lagrange(k,xOne,yOne);
-        for (int j = 1; j < k; ++j) {
-            for (int l = 0; l < k; ++l) {
-                if (xOne[l] != 0) {
-                    yOne[l] = div_galois(suma_galois(yOne[l], s[i*k+j-1]),xOne[l]);
-                } else {//swap
+
+        for (int l = 1; l < k; l++) {
+                if (xOne[l] == 0){
                     uint8_t xTmp, yTmp;
-                    uint8_t diff = 1;
 
-                    xTmp=xOne[k-diff];
-                    yTmp=yOne[k-diff];
+                    xTmp=xOne[0];
+                    yTmp=yOne[0];
 
-                    xOne[k-diff]=xOne[l];
-                    yOne[k-diff]=yOne[l];
+                    xOne[0]=xOne[l];
+                    yOne[0]=yOne[l];
 
                     xOne[l]=xTmp;
                     yOne[l]=yTmp;
-                    if(xOne[l]==0){
-                        printf("AAA\n");
-                        yOne[l] = 0;
-                    }else{
-                        yOne[l] = div_galois(suma_galois(yOne[l], s[i*k+j-1]), xOne[l]);
-                    }
+
+                    break;
                 }
             }
-            s[i*k + j] = lagrange(k-j, xOne, yOne);
+
+
+        s[i*k] = lagrange(k,xOne,yOne);
+        for (int j = 1; j < k; j++) {
+            for (int l = j; l < k; l++) {
+                yOne[l] = div_galois(suma_galois(yOne[l], s[i*k+j-1]),xOne[l]);
+            }
+            s[i*k + j] = lagrange(k-j, xOne+j, yOne+j);
         }
     }
 
-        images[0]->pixels=s;
-
-
-
+    images[0]->pixels=s;
 
 
 
