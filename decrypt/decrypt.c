@@ -103,7 +103,7 @@ ImageBMP* decrypt(int k, char path[]){
 
 //    write_bmp(images[0],"./secret.bmp");
 
-    for (int i = 0; i < k; i++){
+    for (int i = 1; i < k; i++){
         free_image(images[i]);//libero las imagenes
     }
     ImageBMP* finalImage=images[0];
