@@ -91,3 +91,9 @@ uint8_t pot_galois(uint8_t x,uint8_t y){
 
 }
 
+void free_tables(){
+    for (int i = 0; i < 256; i++){
+        free(tabla_mult[i]);
+    }
+}
+

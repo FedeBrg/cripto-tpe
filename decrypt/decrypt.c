@@ -9,7 +9,7 @@ void decrypt(int k, char path[]){
     //k es el k y path es donde estan las imagenes
     k=6;
     //magia para levantar las imagenes
-    ImageBMP **images; //malloc
+    //ImageBMP **images; //malloc
 //    images = read_bmps("../manejo_bmp/test_bmps/",k);
 //    images=read_bmps("../manejo_bmp/secret",k);
 
@@ -27,25 +27,32 @@ void decrypt(int k, char path[]){
      ImageBMP * portadora5 = read_bmp("output/portadora4.bmp");
      ImageBMP * portadora6 = read_bmp("output/portadora5.bmp");
 
+
+   // ImageBMP * portadora1 = read_bmp("portadoras/Alfred.bmp");
+   // ImageBMP * portadora2 = read_bmp("portadoras/Eva.bmp");
+   // ImageBMP * portadora3 = read_bmp("portadoras/Audrey.bmp");
+   // ImageBMP * portadora4 = read_bmp("portadoras/Gustavo.bmp");
+   // ImageBMP * portadora5 = read_bmp("portadoras/Facundo.bmp");
+   // ImageBMP * portadora6 = read_bmp("portadoras/Albert.bmp");
+
     // hago el array de punteros con la imagenes, aca despues hay que hacer el read_bmps
-    ImageBMP * carriers[6];
-    carriers[0] = portadora1;
-    carriers[1] = portadora2;
-    carriers[2] = portadora3;
-    carriers[3] = portadora4;
-    carriers[4] = portadora5;
-    carriers[5] = portadora6;
+    ImageBMP ** images = malloc(k*sizeof(ImageBMP *));
+    images[0] = portadora1;
+    images[1] = portadora2;
+    images[2] = portadora3;
+    images[3] = portadora4;
+    images[4] = portadora5;
+    images[5] = portadora6;
 
-    images=carriers;
 
-    uint8_t *** blocks= malloc(sizeof( uint8_t*) *k); //malloc
+    uint8_t *** blocks= malloc(sizeof( uint8_t**) *k); //malloc
     for (int i = 0; i < k; ++i) {
         blocks[i]=split_portadora(images[i]);
     }
     //obtengo los bloques
 
-    unsigned int length=(images[0]->header.biHeight * images[0]->header.biHeight);
-    uint8_t *s = malloc(sizeof (uint8_t*)*length);
+    unsigned int length=(images[0]->header.biHeight * images[0]->header.biWidth);
+    uint8_t *s = malloc(sizeof (uint8_t)*length);
 
     uint8_t xOne[k];
     uint8_t yOne[k];
@@ -83,11 +90,26 @@ void decrypt(int k, char path[]){
         }
     }
 
+    free(images[0]->pixels);
     images[0]->pixels=s;
+
+    for (int i = 0; i < k; i++){
+        split_portadora_free(blocks[i],images[0]->header.biWidth,images[0]->header.biHeight);
+    }
+
+    free(blocks);
 
 
 
     write_bmp(images[0],"./secret.bmp");
+
+    for (int i = 0; i < k; i++){
+        free_image(images[i]);
+    }
+
+    free(images);
+
+
 }
 
 
@@ -96,7 +118,7 @@ void decrypt(int k, char path[]){
 uint8_t getYFromBlock( uint8_t w, uint8_t v, uint8_t u){
 
     //chequear pariedad
-    if((w&1)^(w&2)>>1^(w&4)>>2^(v&1)^(v&2)>>1^(v&4)>>2^(u&1)^(u&2)>>1==(u&4)>>2){
+    if(((w&1)^(w&2)>>1^(w&4)>>2^(v&1)^(v&2)>>1^(v&4)>>2^(u&1)^(u&2)>>1)==((u&4)>>2)){
         uint8_t t=0; //ejemplo w=11111111 v=10101010 y u=00000000 => w&7 = 00000111, v&7=00000010 y u&3 = 00000000 => x=11101000
         t=t|((w&7)<<5); //and con 00000111 para obtener los ultimos 3 bits y los corro hacia la derecha
         t=t|((v&7)<<2); //and con 00000111 para obtener los ultimos 3 bits y corro hacia la dreche 2 veces

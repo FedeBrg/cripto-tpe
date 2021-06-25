@@ -9,7 +9,7 @@
 #include <math.h>
 
 // pasar int a decimal y almacena en out
-void int_to_bin_digit(uint8_t in, uint8_t count, uint8_t* out)
+void int_to_bin_digit(int in, int count, int* out)
 {
     unsigned int mask = 1U << (count-1);
     for (int i = 0; i < count; i++) {
@@ -19,7 +19,7 @@ void int_to_bin_digit(uint8_t in, uint8_t count, uint8_t* out)
 }
 
 // pasar de binario a decimal
-uint8_t bin_to_dec(uint8_t src[], uint8_t bits){
+uint8_t bin_to_dec(int src[], uint8_t bits){
     uint8_t n, sum = 0;
     for (int i = 0; i < bits; i++) {
         n = src[i];
@@ -29,7 +29,7 @@ uint8_t bin_to_dec(uint8_t src[], uint8_t bits){
 }
 
 // determina la paridad de un binario
-uint8_t get_parity(uint8_t src[]){
+uint8_t get_parity(int src[]){
     uint8_t counter = 0; 
 
     for(int i = 0; i < 8; i++){
@@ -51,7 +51,7 @@ ImageBMP * * encrypt(uint8_t n, uint8_t k, char * directoryName, ImageBMP * secr
     uint32_t size = secretImageBmp->header.biHeight * secretImageBmp->header.biWidth;
 
     // determino la cantidad de bloques de la imagen secreta
-    uint32_t secretBlocksQuantity = size/k;
+   // uint32_t secretBlocksQuantity = size/k;
 
     // ######## TODO ESTO ES PORQUE NO ME ANDA EL READ_BMPS, LO DEJO PARA SEGUIR PROBANDO YO ########
 
@@ -65,6 +65,7 @@ ImageBMP * * encrypt(uint8_t n, uint8_t k, char * directoryName, ImageBMP * secr
 
     // hago el array de punteros con la imagenes, aca despues hay que hacer el read_bmps
     ImageBMP ** carriers = malloc(n*sizeof(ImageBMP *));
+    
     carriers[0] = portadora1;
     carriers[1] = portadora2;
     carriers[2] = portadora3;
@@ -86,10 +87,10 @@ ImageBMP * * encrypt(uint8_t n, uint8_t k, char * directoryName, ImageBMP * secr
     uint32_t blockNumber = 0;
 
     // array de punteros que luego tendran los bloques de cada una de las n portadoras
-    uint8_t ** allCarriersBlocks[n];
+    uint8_t *** allCarriersBlocks = malloc(n * sizeof(uint8_t*));
 
     // el flag nos va a servir para marcar cuando cambiamos un valor del pixel X y asi poder escribirlo
-    uint8_t xValueChanged = 0;
+    //uint8_t xValueChanged = 0;
 
     // genero un array de n posiciones con los bloques en modo XWVU de todas las portadoras
     for(int i = 0; i < n; i++){
@@ -100,12 +101,16 @@ ImageBMP * * encrypt(uint8_t n, uint8_t k, char * directoryName, ImageBMP * secr
 
     // mientras estemos dentro del tamaño de la imagen...
     for(int f = 0; f < size; f += k){
-
         // por cada k bytes de la imagen secreta (un bloque)
-        for(int j = 0; j < k; j++){
+        for(int j = 0; j <= k; j++){
             // guardamos el valor decimal del pixel en el polinomio correspondiente
             polynomial[j] = secretImage[f + j];
+
         }
+
+
+
+
 
         // llegando a este punto, tenemos todas las F guardadas en el array allPolynomial
         // tenemos N imagenes portadoras. hay que evaluar cada F en el bloque XWVU correspondiente de cada imagen
@@ -115,7 +120,7 @@ ImageBMP * * encrypt(uint8_t n, uint8_t k, char * directoryName, ImageBMP * secr
 
         // es un array de arrays de dos posiciones, que van a ser todos los pares <Xi, F(Xi)>, para las n portadoras
         // por cada bloque hay un X, por lo que va a haber un par por bloque
-        uint8_t pairs[n][secretBlocksQuantity][2];
+        //uint8_t pairs[n][secretBlocksQuantity][2];
 
         // obtenemos el tamaño de una imagen portadora, asumiendo que todos los tamaños son iguales, calculo solo con la primera
         //uint32_t totalCarrierBlocks = carriers[0]->header.biWidth * carriers[0]->header.biHeight / 4;
@@ -125,6 +130,19 @@ ImageBMP * * encrypt(uint8_t n, uint8_t k, char * directoryName, ImageBMP * secr
 
         // entonces, por cada valor de x, tenemos que evaluar el polinomio correspondiente
         // por cada portadora que esta en allCarriersBlocks
+
+        for(int p = 0; p < n; p++){
+            for (int m = 0; m < p; m++){
+                if(p!= m && allCarriersBlocks[p][blockNumber][0] == allCarriersBlocks[m][blockNumber][0]){
+                    allCarriersBlocks[m][blockNumber][0] +=1;
+                    m=0;
+                    p=0;
+                }
+            }
+
+        }
+            
+
         for(int i = 0; i < n; i++){
 
             // obtengo el valor de x de la i-esima portadora
@@ -132,50 +150,54 @@ ImageBMP * * encrypt(uint8_t n, uint8_t k, char * directoryName, ImageBMP * secr
 
             // con este for vamos a verificar que el xValue de este bloque no sea igual a 
             // ningun otro xValue previamente analizado
-                int flag= 0;
-                                    if(blockNumber == 5358){
-                        printf("%d\n",xValue );
-                    }
-            for(int u = 0; u < i; u++){
-                if(allCarriersBlocks[u][blockNumber][0] == xValue){
+                //int flag= 0;
 
-                    // marcamos el flag para decir que cambiamos el xValue
-                    //xValueChanged = 1;
+            // for(int u = 0; u < i; u++){
+            //     if(allCarriersBlocks[u][blockNumber][0] == xValue){
 
-                    // si es mayor o igual a 255 tengo que reiniciar el valor del pixel
-                    if(xValue == 255){
-                        xValue = 0;
-                    }
-                    else{
-                        // incrementamos el xValue para que no sea igual al anterior
-                        xValue += 1;
-                    }
+            //         // marcamos el flag para decir que cambiamos el xValue
+            //         //xValueChanged = 1;
 
-                    if (flag)
-                    {
-                        //printf("AAA,%d\n",blockNumber);
-                    }
-                    flag++;
-                    // si encuentro uno igual quiero volver a analizar con todos los pixeles anteriores
-                    u = 0;
-                }
+            //         // si es mayor o igual a 255 tengo que reiniciar el valor del pixel
+            //      //   if(xValue == 255){
+            //        //     xValue = 0;
+            //         if (f ==22384)
+            //         {
+            //             printf("aaaaaaaaaaaaaaaaaaaaaaaaa\n");
+            //         }
+            //         //printf("%d\n", f);
+            //        // }
+            //        // else{
+            //             // incrementamos el xValue para que no sea igual al anterior
+            //             xValue += 1;
+            //        // }
 
-            }
-                                               if(blockNumber == 5358){
-                        printf("%d\n",xValue );
-                    }
+            //         if (flag)
+            //         {
+            //             //printf("AAA,%d\n",blockNumber);
+            //         }
+            //         flag++;
+            //         // si encuentro uno igual quiero volver a analizar con todos los pixeles anteriores
+            //         u = 0;
+            //     }
+
+            // }
+
+  
+                   
 
             // hago la evaluacion en p-esimo polinomio
             for(int u = 0; u < k; u++){
                 polynomialEvaluated = suma_galois(polynomialEvaluated, mult_galois(polynomial[u], pot_galois(xValue, u)));
             }
 
+
+
             // guardo el valor del polinomio evaluado junto con el valor original del pixel X
-            pairs[i][blockNumber][0] = xValue;
-            pairs[i][blockNumber][1] = polynomialEvaluated;
+            //pairs[i][blockNumber][0] = xValue;
+            //pairs[i][blockNumber][1] = polynomialEvaluated;
 
             // reseteo el valor de la evaluacion de F(Xi)
-            polynomialEvaluated = 0;
 
             // llegado este punto, tenemos en pairs[][] el par <Xi, F(Xi)> de la i-esima portadora
 
@@ -183,11 +205,11 @@ ImageBMP * * encrypt(uint8_t n, uint8_t k, char * directoryName, ImageBMP * secr
             // y dentro de ellos ir guardando los bits de X
 
             //obtengo el valor binario de F(Xi)
-            uint8_t binaryFX[8];
-            int_to_bin_digit(pairs[i][blockNumber][1], 8, binaryFX);
+            int binaryFX[8] = {0,0,0,0,0,0,0,0};
+            int_to_bin_digit(polynomialEvaluated, 8, binaryFX);
 
             // obtengo el valor de W y calculo el valor binario del mismo
-            uint8_t binaryW[8];
+            int binaryW[8] = {0,0,0,0,0,0,0,0};;
             int_to_bin_digit(allCarriersBlocks[i][blockNumber][1], 8, binaryW);
 
             // dentro de W piso los ultimos 3 bits con el binario de F(Xi)
@@ -196,7 +218,7 @@ ImageBMP * * encrypt(uint8_t n, uint8_t k, char * directoryName, ImageBMP * secr
             binaryW[7] = binaryFX[2];
 
             // obtengo el valor de V y calculo el valor binario del mismo
-            uint8_t binaryV[8];
+            int binaryV[8] = {0,0,0,0,0,0,0,0};;
             int_to_bin_digit(allCarriersBlocks[i][blockNumber][2], 8, binaryV);
 
             // dentro de V piso los ultimos 3 bits con el binario de F(Xi)
@@ -205,7 +227,7 @@ ImageBMP * * encrypt(uint8_t n, uint8_t k, char * directoryName, ImageBMP * secr
             binaryV[7] = binaryFX[5];
 
             // obtengo el valor de U y calculo el valor binario del mismo
-            uint8_t binaryU[8];
+            int binaryU[8] = {0,0,0,0,0,0,0,0};;
             int_to_bin_digit(allCarriersBlocks[i][blockNumber][3], 8, binaryU);
 
             // dentro de U piso los ultimos 2 bits con el binario de F(Xi)
@@ -213,7 +235,7 @@ ImageBMP * * encrypt(uint8_t n, uint8_t k, char * directoryName, ImageBMP * secr
             binaryU[7] = binaryFX[7];
 
             // calculo la paridad de binaryFX y lo pongo en el binario de U
-            uint8_t parity = get_parity(binaryFX);
+            int parity = get_parity(binaryFX);
             binaryU[5] = parity;
 
             // con estos binarios, ahora tengo que calcular el decimal
@@ -226,15 +248,20 @@ ImageBMP * * encrypt(uint8_t n, uint8_t k, char * directoryName, ImageBMP * secr
 
             // si resulta que cambiamos el xValue, tenemos que guardar el nuevo valor en el pixel X
             //if(xValueChanged){
+
                 allCarriersBlocks[i][blockNumber][0] = xValue;
                 //xValueChanged = 0;
             //}
+
+
+            polynomialEvaluated = 0;
+
         }
 
         // incrementamos el contador de bloque
         blockNumber++;
     }
-
+        
 
     // cuando salgo de ese loop, ya tengo las portadoras con todos sus bloques modificados
     for(int i = 0; i < n; i++){
@@ -242,9 +269,17 @@ ImageBMP * * encrypt(uint8_t n, uint8_t k, char * directoryName, ImageBMP * secr
         uint8_t * mergedCarrier = merge_portadora(allCarriersBlocks[i], carriers[i]->header.biWidth, carriers[i]->header.biHeight);
 
         // piso los pixeles de la carrier image con los pixeles nuevos
+        free(carriers[i] -> pixels);
         carriers[i] -> pixels = mergedCarrier;
 
     }
+
+    for (int i = 0; i < n; i++){
+        split_portadora_free(allCarriersBlocks[i],secretImageBmp->header.biWidth, secretImageBmp->header.biHeight);
+    }
+
+    free(allCarriersBlocks);
+
 
     return carriers;
 

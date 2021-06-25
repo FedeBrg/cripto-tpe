@@ -71,3 +71,8 @@ void write_bmp(ImageBMP * bmp, char * filename);
 
 
 void write_bmps(ImageBMP * bmp, char * filename, int k);
+
+
+void split_portadora_free(uint8_t * * split, uint32_t width, uint32_t height);
+
+void free_image(ImageBMP * image);
