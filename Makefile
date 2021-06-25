@@ -1,7 +1,7 @@
 all: dec enc gal lag bmp main
 
-main: app.c galois/galois.o lagrange/lagrange.o manejo_bmp/bmp_handling.o
-	gcc -Wall -Werror app.c manejo_bmp/bmp_handling.o galois/galois.o lagrange/lagrange.o decrypt/decrypt.o encrypt/encrypt.o -o app -lm
+main: application.c galois/galois.o lagrange/lagrange.o manejo_bmp/bmp_handling.o
+	gcc -Wall -Werror application.c manejo_bmp/bmp_handling.o galois/galois.o lagrange/lagrange.o decrypt/decrypt.o encrypt/encrypt.o -o app -lm
 
 gal: galois/galois.c 
 	gcc -c -Wall -Werror -o galois/galois.o galois/galois.c 
