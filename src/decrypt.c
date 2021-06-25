@@ -1,49 +1,15 @@
-#include "../manejo_bmp/bmp_handling.h"
-#include "../lagrange/lagrange.h"
-#include "../galois/galois.h"
-#include "decrypt.h"
+#include <bmp_handling.h>
+#include <encrypt.h>
+#include <decrypt.h>
+#include <galois.h>
+#include <lagrange.h>
 
 
 
 ImageBMP* decrypt(int k, char path[]){
     //k es el k y path es donde estan las imagenes
 
-    //magia para levantar las imagenes
-    //ImageBMP **images; //malloc
-//    images = read_bmps("../manejo_bmp/test_bmps/",k);
-//    images=read_bmps("../manejo_bmp/secret",k);
-
-   // ImageBMP * portadora1 = read_bmp("manejo_bmp/secret/Alfredshare.bmp");
-   // ImageBMP * portadora2 = read_bmp("manejo_bmp/secret/Evashare.bmp");
-   // ImageBMP * portadora3 = read_bmp("manejo_bmp/secret/Audreyshare.bmp");
-   // ImageBMP * portadora4 = read_bmp("manejo_bmp/secret/Gustavoshare.bmp");
-   // ImageBMP * portadora5 = read_bmp("manejo_bmp/secret/Marilynshare.bmp");
-   // ImageBMP * portadora6 = read_bmp("manejo_bmp/secret/Jamesshare.bmp");
-
-     ImageBMP * portadora1 = read_bmp("output/portadora0.bmp");
-     ImageBMP * portadora2 = read_bmp("output/portadora1.bmp");
-     ImageBMP * portadora3 = read_bmp("output/portadora2.bmp");
-     ImageBMP * portadora4 = read_bmp("output/portadora3.bmp");
-     ImageBMP * portadora5 = read_bmp("output/portadora4.bmp");
-     ImageBMP * portadora6 = read_bmp("output/portadora5.bmp");
-
-
-   // ImageBMP * portadora1 = read_bmp("portadoras/Alfred.bmp");
-   // ImageBMP * portadora2 = read_bmp("portadoras/Eva.bmp");
-   // ImageBMP * portadora3 = read_bmp("portadoras/Audrey.bmp");
-   // ImageBMP * portadora4 = read_bmp("portadoras/Gustavo.bmp");
-   // ImageBMP * portadora5 = read_bmp("portadoras/Facundo.bmp");
-   // ImageBMP * portadora6 = read_bmp("portadoras/Albert.bmp");
-
-    // hago el array de punteros con la imagenes, aca despues hay que hacer el read_bmps
-    ImageBMP ** images = malloc(k*sizeof(uint8_t *));
-    images[0] = portadora1;
-    images[1] = portadora2;
-    images[2] = portadora3;
-    images[3] = portadora4;
-    images[4] = portadora5;
-    images[5] = portadora6;
-
+    ImageBMP ** images = read_bmps(path, k);
 
     uint8_t *** blocks= malloc(sizeof( uint8_t**) *k); //espacio para bloques
     //obtengo los bloques

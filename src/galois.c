@@ -1,4 +1,4 @@
-#include "galois.h"
+#include <galois.h>
 #include <stdlib.h>
 
 
@@ -8,8 +8,8 @@
 // Haciendo el truco de desplazar podes usar todo con uint8 y te ahorras espacio
 
 
-//uint8_t gen_desplazado = 0b01100011;
-uint8_t gen_desplazado = 0b00011011;
+uint8_t gen_desplazado = 0b01100011;
+// uint8_t gen_desplazado = 0b00011011; Otro generador para probar
 uint8_t tabla_inv[256];
 
 uint8_t * tabla_mult[256];

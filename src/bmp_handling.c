@@ -1,10 +1,14 @@
-#include "bmp_handling.h"
+#include <bmp_handling.h>
 
 
 
 ImageBMP * read_bmp(char * filename){
 
 	FILE * fp = fopen(filename, "rb");
+
+	if(fp == NULL){
+		return NULL;
+	}
 
 	ImageBMP * bmp = malloc(sizeof(*bmp));
 
@@ -38,10 +42,12 @@ ImageBMP * read_bmp(char * filename){
 
 	bmp->pixels = malloc(sizeof(*bmp->pixels) * size);
 
+	if(bmp->pixels == NULL){
+		printf("Memoria insuficiente\n");
+		exit(-1);
+	}
 
     fseek(fp, bmp->header.bfOffBits, SEEK_SET);
-
-
 
     fread(bmp->pixels, size , 1, fp);
 
@@ -60,32 +66,44 @@ char * create_path(const char * directory, const char * name){
 	strcat(filename,name);
 
 	return filename;
-
-
 }
 
-ImageBMP * * read_bmps(char * directory, int k){
+int count_files(char * directory){
 	DIR *d;
 	struct dirent *dir;
 	d = opendir(directory);
-	ImageBMP * * bmps = malloc(sizeof(ImageBMP *) * k);
 	int i = 0;
 	if (d) {
-		while ((dir = readdir(d)) != NULL && i<k) {
-			if(strcmp(".",dir->d_name)){
+		while ((dir = readdir(d)) != NULL) {
+			if (dir->d_type == DT_REG) {
+            	i++;
+        	}
+    	}
+    	closedir(d);
+    } else {
+    	return -1;
+    }
+
+    return i;
+}
+
+ImageBMP * * read_bmps(char * directory, int n){
+	DIR *d;
+	struct dirent *dir;
+	d = opendir(directory);
+	ImageBMP * * bmps = malloc(sizeof(ImageBMP *) * n);
+	int i = 0;
+	if (d) {
+		while ((dir = readdir(d)) != NULL && i<n) {
+			if (dir->d_type == DT_REG) {
 
 				char * filename = create_path(directory,dir->d_name);
 				bmps[i] = read_bmp(filename);
 				free(filename);
-
 				i++;
 			}
     	}
     	closedir(d);
-    }
-
-    if(i<k){
-    	exit(1);
     }
 
     return bmps;
@@ -116,7 +134,6 @@ void write_bmp(ImageBMP * bmp, char * filename){
 
 	unsigned int s = bmp->header.bfOffBits - sizeof(HeaderBMP) +1;
 	fwrite(bmp->extraInfo, s , 1, fp);
-
 
 	fseek(fp, bmp->header.bfOffBits, SEEK_SET);
 	uint32_t size = bmp->header.biHeight * bmp->header.biWidth;
@@ -162,7 +179,6 @@ uint8_t * merge_portadora(uint8_t * * portadora, uint32_t width, uint32_t height
 
 	int pi = 0;
 
-
 	for (int i = height-1; i > 0; i-=2){
 		for (int j = 0; j < width-1; j+=2){
 			uint8_t * sub_array = portadora[pi];
@@ -173,8 +189,6 @@ uint8_t * merge_portadora(uint8_t * * portadora, uint32_t width, uint32_t height
 			pixels[(i*width + j)+1-width] = sub_array[3];	// U
 			
 			pi++;
-
-
 		}
 
 	}

@@ -1,11 +1,7 @@
-//
-// Created by manuel.rodriguez on 09/05/2021.
-//
-
-#include "../lagrange/lagrange.h"
-#include "../galois/galois.h"
-#include "../manejo_bmp/bmp_handling.h"
-#include "encrypt.h"
+#include <lagrange.h>
+#include <galois.h>
+#include <bmp_handling.h>
+#include <encrypt.h>
 #include <math.h>
 
 // pasar int a decimal y almacena en out
@@ -42,10 +38,9 @@ uint8_t get_parity(int src[]){
 }
 
 // Funcion de encripcion, la escribo toda aca, despues hay que modularizarlo
-ImageBMP ** encrypt(uint8_t k, char * directoryName, ImageBMP * secretImageBmp){
+ImageBMP ** encrypt(uint8_t k, uint8_t n, char * directoryName, ImageBMP * secretImageBmp){
 
     // traemos el n, que es la cantidad de portadoras
-    // int n = ;
     
     // de la imagen secreta, tomo sus pixeles
     uint8_t * secretImage = secretImageBmp->pixels;

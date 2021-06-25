@@ -1,4 +1,5 @@
-#include "lagrange.h"
+#include <lagrange.h>
+#include <galois.h>
 
 
 //https://en.wikipedia.org/wiki/Lagrange_polynomial
