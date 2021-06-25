@@ -8,8 +8,8 @@
 // Haciendo el truco de desplazar podes usar todo con uint8 y te ahorras espacio
 
 
-uint8_t gen_desplazado = 0b01100011;
-
+//uint8_t gen_desplazado = 0b01100011;
+uint8_t gen_desplazado = 0b00011011;
 uint8_t tabla_inv[256];
 
 uint8_t * tabla_mult[256];
@@ -73,7 +73,6 @@ uint8_t inv_galois(uint8_t x){
     return tabla_inv[x];
 
 }
-
 
 uint8_t div_galois(uint8_t x, uint8_t y){
 

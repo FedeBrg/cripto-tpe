@@ -52,26 +52,20 @@ uint8_t * * split_secret(ImageBMP * secret, int k);
 ImageBMP * read_bmp(char * filename);
 ImageBMP * read_bmp_new(char * filename);
 
-
 // Le pasas el k que te dan de entrada y el path a un DIRECTORIO y te devuelve un ImageBMP * * con todas las bmps
 ImageBMP * * read_bmps(char * directory, int k); 
 
-
 // Le pasas el array de arrays con los cuadraditos de 2x2 y te los mergea para poder ponerlos como pixel en la ImageBMP
 uint8_t * merge_portadora(uint8_t * * portadora, uint32_t width, uint32_t height);
-
 
 // Le pasas el [S1, S2, ..., Sn], donde n = (bmp->header.biHeight * bmp->header.biHeight)/k
 // y cada S = [s0, s1, ..., sk]
 // te devuelve un array para meter en la ImageBMP
 uint8_t * merge_secret(uint8_t * * secret, int k, uint32_t width, uint32_t height);
 
-
 void write_bmp(ImageBMP * bmp, char * filename);
 
-
 void write_bmps(ImageBMP * bmp, char * filename, int k);
-
 
 void split_portadora_free(uint8_t * * split, uint32_t width, uint32_t height);
 

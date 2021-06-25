@@ -36,7 +36,7 @@ void decrypt(int k, char path[]){
    // ImageBMP * portadora6 = read_bmp("portadoras/Albert.bmp");
 
     // hago el array de punteros con la imagenes, aca despues hay que hacer el read_bmps
-    ImageBMP ** images = malloc(k*sizeof(ImageBMP *));
+    ImageBMP ** images = malloc(k*sizeof(uint8_t *));
     images[0] = portadora1;
     images[1] = portadora2;
     images[2] = portadora3;
