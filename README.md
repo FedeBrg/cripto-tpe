@@ -36,14 +36,17 @@ imágenes de extensión .bmp, de 8 bits por pixel, de igual tamaño que la image
 Además, deberá verificarse que existan por lo menos k imágenes en el directorio.
 
 ## Ejemplos
-Para distribuir la imagen “Albert.bmp” según esquema (4,8) guardando las sombras en
-imágenes del directorio “test_bmps”:
+Para distribuir la imagen “Albert.bmp” según esquema (4,8) tomando las imagenes del 
+directorio “test_bmps”:
 
 `$> ./ss d Albert.bmp 4 test_bmps/`
 
-Para recuperar la imagen “secreto.bmp”, en un esquema (4,8) buscando imágenes en el
-directorio “color280x440/”
+Esto crea el directorio "portadoras_generadas" donde se guardan las imagenes con las
+sombras distribuidas.
 
-`$> ./ss r secreto.bmp 4 color280x440/`
+Para recuperar la imagen preivamente distribuida en un esquema (4,8) buscando imágenes en el
+directorio “portadoras_generadas” y guardandola en "secreto.bmp"
+
+`$> ./ss r secreto.bmp 4 portadoras_generadas/`
 
 

@@ -14,24 +14,24 @@ int main(int argc, char ** argv){
 
 	char * out_dir = "portadoras_generadas";
 	if(argc != 5){
-		printf("Numero de parametros incorrecto.\n");
-		return -1;
+		printf("Numero de parametros incorrecto. Se esperan 4 parametros.\n");
+		exit(EXIT_FAILURE);
 	}
 
 	int k = atoi(argv[3]);
 	if (k > 6 || k < 4){
 		printf("El valor k=%d esta fuera del rango [4,6].\n",k );
-		return -1;
+		exit(EXIT_FAILURE);
 	}
 
 	int n = count_files(argv[4]);
 
 	if(n == -1){
 		printf("El directorio no existe.\n");
-		return -1;
+		exit(EXIT_FAILURE);
 	} else if (n < k){
 		printf("No hay suficientes imagenes en el directorio.(n = %d, k = %d)\n",n,k );
-		return -1;
+		exit(EXIT_FAILURE);
 	}
 
 	llenar_tablas();
@@ -42,7 +42,7 @@ int main(int argc, char ** argv){
 		//ImageBMP * secret = NULL;
 		if(secret == NULL){
 			printf("No existe la imagen que se quiere ocultar.\n");
-			return -1;
+			exit(EXIT_FAILURE);
 		}
 		ImageBMP ** carriers = encrypt(k, n, argv[4], secret);
 
@@ -58,8 +58,6 @@ int main(int argc, char ** argv){
 			write_bmp(carriers[i], name);
 		}
 
-		printf("Distribucion terminada. Portadoras en: portadoras_generadas\n");
-
 		for (int i = 0; i < n; i++){
 	        free_image(carriers[i]);
 	    }
@@ -72,12 +70,13 @@ int main(int argc, char ** argv){
 		ImageBMP * secret = decrypt(k, argv[4]);
 		write_bmp(secret, argv[2]);
 		free_image(secret);
-		printf("Recuperacion terminada.\n");
 	}
 	else{
-		printf("La opcion %s es invalida.\n",argv[1]);
-		return -1;
+		printf("La opcion %s es invalida. Utilizar d para distribuir y r para recuperar\n",argv[1]);
+		exit(EXIT_FAILURE);
 	}
 
 	free_tables();
+
+	return EXIT_SUCCESS;
 }
